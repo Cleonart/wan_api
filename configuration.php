@@ -9,6 +9,6 @@
 
 	$dale = new dale();
 
-	$dale->konek_ke_database($HOST, $DATABASE,$USERNAME,$PASSWORD);
+  $dale->konek_ke_database($HOST, $DATABASE,$USERNAME,$PASSWORD);
 
 ?>
