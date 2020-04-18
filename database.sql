@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 15 Mar 2020 pada 15.43
--- Versi server: 10.4.11-MariaDB
--- Versi PHP: 7.2.28
+-- Generation Time: Apr 18, 2020 at 09:54 PM
+-- Server version: 10.4.6-MariaDB
+-- PHP Version: 7.3.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,13 +19,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ppl`
+-- Database: `database`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `category_product`
+-- Table structure for table `category_product`
 --
 
 CREATE TABLE `category_product` (
@@ -34,7 +34,7 @@ CREATE TABLE `category_product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `category_product`
+-- Dumping data for table `category_product`
 --
 
 INSERT INTO `category_product` (`id_category_product`, `name_category_product`) VALUES
@@ -46,7 +46,7 @@ INSERT INTO `category_product` (`id_category_product`, `name_category_product`) 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `customer_feedback`
+-- Table structure for table `customer_feedback`
 --
 
 CREATE TABLE `customer_feedback` (
@@ -57,7 +57,7 @@ CREATE TABLE `customer_feedback` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `customer_order`
+-- Table structure for table `customer_order`
 --
 
 CREATE TABLE `customer_order` (
@@ -69,7 +69,7 @@ CREATE TABLE `customer_order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `customer_order`
+-- Dumping data for table `customer_order`
 --
 
 INSERT INTO `customer_order` (`id_cust_order`, `date_order`, `date_order_paid`, `status_order`, `total_price_order`) VALUES
@@ -78,7 +78,7 @@ INSERT INTO `customer_order` (`id_cust_order`, `date_order`, `date_order_paid`, 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `location`
+-- Table structure for table `location`
 --
 
 CREATE TABLE `location` (
@@ -91,7 +91,22 @@ CREATE TABLE `location` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `order_cancellation`
+-- Table structure for table `order`
+--
+
+CREATE TABLE `order` (
+  `id_order` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_service` int(11) NOT NULL,
+  `id_shopcart` int(11) NOT NULL,
+  `payment_date` datetime NOT NULL,
+  `note` varchar(1024) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_cancellation`
 --
 
 CREATE TABLE `order_cancellation` (
@@ -103,7 +118,7 @@ CREATE TABLE `order_cancellation` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `order_history`
+-- Table structure for table `order_history`
 --
 
 CREATE TABLE `order_history` (
@@ -112,16 +127,40 @@ CREATE TABLE `order_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `order_history`
+-- Dumping data for table `order_history`
 --
 
 INSERT INTO `order_history` (`id_order_history`, `id_order`) VALUES
+(220010101, 220010101),
 (220010101, 220010101);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `product`
+-- Table structure for table `payment`
+--
+
+CREATE TABLE `payment` (
+  `id_payment` int(11) NOT NULL,
+  `id_customer_order` int(11) NOT NULL,
+  `payment_method` int(11) NOT NULL,
+  `nominal` int(11) NOT NULL,
+  `payment_date` datetime NOT NULL,
+  `payment_exp_time` int(11) NOT NULL,
+  `payment_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `payment`
+--
+
+INSERT INTO `payment` (`id_payment`, `id_customer_order`, `payment_method`, `nominal`, `payment_date`, `payment_exp_time`, `payment_status`) VALUES
+(130420, 0, 0, 999021, '0000-00-00 00:00:00', 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product`
 --
 
 CREATE TABLE `product` (
@@ -135,7 +174,7 @@ CREATE TABLE `product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `product`
+-- Dumping data for table `product`
 --
 
 INSERT INTO `product` (`id_product`, `name_product`, `expired_date`, `date_in`, `date_out`, `quantity`, `price`) VALUES
@@ -144,8 +183,9 @@ INSERT INTO `product` (`id_product`, `name_product`, `expired_date`, `date_in`, 
 (1103, 'Air Galon Aqua + Galon', '2020-05-01', '2020-03-02', '0000-00-00', 25, 90000);
 
 -- --------------------------------------------------------
- --
--- Struktur dari tabel `promotion`
+
+--
+-- Table structure for table `promotion`
 --
 
 CREATE TABLE `promotion` (
@@ -160,7 +200,21 @@ CREATE TABLE `promotion` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `service`
+-- Table structure for table `rating`
+--
+
+CREATE TABLE `rating` (
+  `id_rating` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_service` int(11) NOT NULL,
+  `rating_range` int(11) NOT NULL,
+  `comment` varchar(1024) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `service`
 --
 
 CREATE TABLE `service` (
@@ -173,10 +227,18 @@ CREATE TABLE `service` (
   `price_service` int(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `service`
+--
+
+INSERT INTO `service` (`id_service`, `name_service`, `provider_service`, `provider_type_service`, `time_booking_service`, `duration_service`, `price_service`) VALUES
+(11101, 'Make Up', '202100001', '11', '00:00:00.000000', '00:00:00.000000', 50000),
+(12102, 'Blow', '202100002', '21', '00:00:00.000000', '00:00:00.000000', 75000);
+
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `service_type`
+-- Table structure for table `service_type`
 --
 
 CREATE TABLE `service_type` (
@@ -187,7 +249,29 @@ CREATE TABLE `service_type` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `user`
+-- Table structure for table `shopping_cart`
+--
+
+CREATE TABLE `shopping_cart` (
+  `id_shopcart` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_service_product` int(11) NOT NULL,
+  `shopcart_qty` int(11) NOT NULL DEFAULT 0,
+  `shopcart_price` int(11) NOT NULL,
+  `shopping_cart_status` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `shopping_cart`
+--
+
+INSERT INTO `shopping_cart` (`id_shopcart`, `id_user`, `id_service_product`, `shopcart_qty`, `shopcart_price`, `shopping_cart_status`) VALUES
+(2147483647, 2020001, 12102, 1, 75000, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -197,21 +281,24 @@ CREATE TABLE `user` (
   `phone_num_user` varchar(15) NOT NULL,
   `pic_user` varchar(100) NOT NULL,
   `user_type` int(11) NOT NULL,
+  `balance` int(11) NOT NULL,
   `regis_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `user`
+-- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id_user`, `name_user`, `email_user`, `phone_num_user`, `pic_user`, `user_type`, `regis_date`) VALUES
-(20100001, 'Clementine', 'clem@user.com', '081234567898', '/usr/20100001/prof_pic.jpg', 1, '2020-03-08'),
-(20200001, 'Marcelino', 'pasuhuk@print.com', '087654332123', '/usr/20200001/prof_pic.jpg', 1, '2020-03-09');
+INSERT INTO `user` (`id_user`, `name_user`, `email_user`, `phone_num_user`, `pic_user`, `user_type`, `balance`, `regis_date`) VALUES
+(20100001, 'Clementine', 'clem@user.com', '081234567898', '/usr/20100001/prof_pic.jpg', 1, 10000, '2020-03-08'),
+(20200001, 'Marcelino', 'pasuhuk@print.com', '087654332123', '/usr/20200001/prof_pic.jpg', 1, 10000, '2020-03-09'),
+(202100001, 'cleon', 'cleonart_salon@gmail.com', '082111100051', '', 2, 10000, '2020-04-12'),
+(202100002, 'stark', 'stark_spa@yahoo.co.id', '08823335555', '', 2, 10000, '2020-04-15');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `user_type`
+-- Table structure for table `user_type`
 --
 
 CREATE TABLE `user_type` (
@@ -220,7 +307,7 @@ CREATE TABLE `user_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `user_type`
+-- Dumping data for table `user_type`
 --
 
 INSERT INTO `user_type` (`id_user_type`, `name_user_type`) VALUES
@@ -233,89 +320,107 @@ INSERT INTO `user_type` (`id_user_type`, `name_user_type`) VALUES
 --
 
 --
--- Indeks untuk tabel `category_product`
+-- Indexes for table `category_product`
 --
 ALTER TABLE `category_product`
   ADD PRIMARY KEY (`id_category_product`);
 
 --
--- Indeks untuk tabel `customer_feedback`
+-- Indexes for table `customer_feedback`
 --
 ALTER TABLE `customer_feedback`
   ADD PRIMARY KEY (`id_customer_feedback`);
 
 --
--- Indeks untuk tabel `customer_order`
+-- Indexes for table `customer_order`
 --
 ALTER TABLE `customer_order`
   ADD PRIMARY KEY (`id_cust_order`);
 
 --
--- Indeks untuk tabel `location`
+-- Indexes for table `location`
 --
 ALTER TABLE `location`
   ADD PRIMARY KEY (`id_location`);
 
 --
--- Indeks untuk tabel `order_cancellation`
+-- Indexes for table `order_cancellation`
 --
 ALTER TABLE `order_cancellation`
   ADD PRIMARY KEY (`id_order_cancellation`);
 
 --
--- Indeks untuk tabel `product`
+-- Indexes for table `payment`
+--
+ALTER TABLE `payment`
+  ADD PRIMARY KEY (`id_payment`);
+
+--
+-- Indexes for table `product`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`id_product`);
 
 --
--- Indeks untuk tabel `promotion`
+-- Indexes for table `promotion`
 --
 ALTER TABLE `promotion`
   ADD PRIMARY KEY (`id_promotion`);
 
 --
--- Indeks untuk tabel `service`
+-- Indexes for table `rating`
+--
+ALTER TABLE `rating`
+  ADD PRIMARY KEY (`id_rating`);
+
+--
+-- Indexes for table `service`
 --
 ALTER TABLE `service`
   ADD PRIMARY KEY (`id_service`);
 
 --
--- Indeks untuk tabel `service_type`
+-- Indexes for table `service_type`
 --
 ALTER TABLE `service_type`
   ADD PRIMARY KEY (`id_service_type`);
 
 --
--- Indeks untuk tabel `user`
+-- Indexes for table `shopping_cart`
+--
+ALTER TABLE `shopping_cart`
+  ADD PRIMARY KEY (`id_shopcart`);
+
+--
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- Indeks untuk tabel `user_type`
+-- Indexes for table `user_type`
 --
 ALTER TABLE `user_type`
   ADD PRIMARY KEY (`id_user_type`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `category_product`
+-- AUTO_INCREMENT for table `category_product`
 --
 ALTER TABLE `category_product`
   MODIFY `id_category_product` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT untuk tabel `customer_order`
+-- AUTO_INCREMENT for table `customer_order`
 --
 ALTER TABLE `customer_order`
   MODIFY `id_cust_order` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT untuk tabel `user_type`
+-- AUTO_INCREMENT for table `user_type`
 --
 ALTER TABLE `user_type`
   MODIFY `id_user_type` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
