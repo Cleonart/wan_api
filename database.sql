@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 26, 2020 at 04:26 PM
+-- Generation Time: Apr 28, 2020 at 01:51 AM
 -- Server version: 10.1.40-MariaDB
 -- PHP Version: 7.3.5
 
@@ -167,6 +167,7 @@ INSERT INTO `payment` (`id_payment`, `id_customer_order`, `payment_method`, `nom
 
 CREATE TABLE `product` (
   `id_product` int(5) NOT NULL,
+  `provider_product` varchar(100) DEFAULT NULL,
   `name_product` varchar(30) NOT NULL,
   `expired_date` date NOT NULL,
   `date_in` date NOT NULL,
@@ -179,10 +180,10 @@ CREATE TABLE `product` (
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`id_product`, `name_product`, `expired_date`, `date_in`, `date_out`, `quantity`, `price`) VALUES
-(1101, 'Air Galon Aqua', '2020-05-01', '2020-03-02', '0000-00-00', 25, 17500),
-(1102, 'Air Galon Ake', '2020-05-01', '2020-03-02', '0000-00-00', 15, 15000),
-(1103, 'Air Galon Aqua + Galon', '2020-05-01', '2020-03-02', '0000-00-00', 25, 90000);
+INSERT INTO `product` (`id_product`, `provider_product`, `name_product`, `expired_date`, `date_in`, `date_out`, `quantity`, `price`) VALUES
+(1101, NULL, 'Air Galon Aqua', '2020-05-01', '2020-03-02', '0000-00-00', 25, 17500),
+(1102, NULL, 'Air Galon Ake', '2020-05-01', '2020-03-02', '0000-00-00', 15, 15000),
+(1103, NULL, 'Air Galon Aqua + Galon', '2020-05-01', '2020-03-02', '0000-00-00', 25, 90000);
 
 -- --------------------------------------------------------
 
@@ -236,8 +237,9 @@ CREATE TABLE `service` (
 --
 
 INSERT INTO `service` (`id_service`, `name_service`, `provider_service`, `provider_type_service`, `provider_service_group`, `time_booking_service`, `duration_service`, `service_description`, `price_service`) VALUES
+(1446, 'Self Nail #1', '202100003', '180', '# Gaoel', '00:00:00.000000', '00:00:00.000000', '', 30000),
 (11101, 'Make Up', '202100002', '01', '#Make Up', '00:00:00.000000', '00:00:00.000000', '', 50000),
-(12102, 'Blow', '202100002', '01', '#Perawatan', '00:00:00.000000', '00:00:00.000000', '', 75000);
+(12102, 'Blow', '202100002', '01', '#Perawatan', '00:00:00.000000', '00:00:00.000000', 'Blow cepat dengan kipas angin tenaga nuklir', 75000);
 
 -- --------------------------------------------------------
 
@@ -262,6 +264,8 @@ CREATE TABLE `shopping_cart` (
   `id_service_product` int(11) NOT NULL,
   `shopcart_qty` int(11) NOT NULL DEFAULT '0',
   `shopcart_price` int(11) NOT NULL,
+  `shopcart_price_total` int(11) NOT NULL DEFAULT '0',
+  `shopcart_note` varchar(100) NOT NULL,
   `shopping_cart_status` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -269,8 +273,8 @@ CREATE TABLE `shopping_cart` (
 -- Dumping data for table `shopping_cart`
 --
 
-INSERT INTO `shopping_cart` (`id_shopcart`, `id_user`, `id_service_product`, `shopcart_qty`, `shopcart_price`, `shopping_cart_status`) VALUES
-(2147483647, 2020001, 12102, 1, 75000, 1);
+INSERT INTO `shopping_cart` (`id_shopcart`, `id_user`, `id_service_product`, `shopcart_qty`, `shopcart_price`, `shopcart_price_total`, `shopcart_note`, `shopping_cart_status`) VALUES
+(2841789, 2020001, 1446, 1, 30000, 30000, 'Sesuai pesanan', 1);
 
 -- --------------------------------------------------------
 
@@ -299,7 +303,8 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id_user`, `name_user`, `email_user`, `phone_num_user`, `pic_user`, `user_type`, `balance`, `user_vendor_type`, `user_vendor_online`, `vendor_short_desc`, `regis_date`) VALUES
 (20100001, 'Clementine', 'clem@user.com', '081234567898', '/usr/20100001/prof_pic.jpg', 1, 50000, NULL, 0, NULL, '2020-03-08'),
 (20200001, 'Marcelino', 'pasuhuk@print.com', '087654332123', '/usr/20200001/prof_pic.jpg', 1, 10000, NULL, 0, NULL, '2020-03-09'),
-(202100002, 'Stark Spa', 'stark_spa@yahoo.co.id', '08823335555', 'https://images.unsplash.com/photo-1587802480811-4be6efcdf373?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80', 2, 10000, 180, 1, 'Make up and Little Spa', '2020-04-15');
+(202100002, 'Stark Spa', 'stark_spa@yahoo.co.id', '08823335555', 'https://images.unsplash.com/photo-1587802480811-4be6efcdf373?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80', 2, 10000, 180, 1, 'Make up and Little Spa', '2020-04-15'),
+(202100003, 'Evan Spa', 'evans@gmail.com', '02932932', 'https://images.unsplash.com/photo-1587802480811-4be6efcdf373?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80\r\n\r\n', 2, 10000, 180, 1, 'Salon', '0000-00-00');
 
 -- --------------------------------------------------------
 
