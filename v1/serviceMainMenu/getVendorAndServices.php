@@ -11,7 +11,7 @@
 
 		$data = $dale->kueri("SELECT a.`id_service` as product_id,
 									 a.`name_service` as product_name,
-									 a.`price_service` as product_price
+									 a.`price_service` as product_price,
 									 a.`service_description` as product_desc
 			                  FROM   `service`  as a
 			                  INNER JOIN `user` as b
@@ -22,19 +22,37 @@
 		return json_decode($data);
 	}
 
-	function getSpecificProductFromShoppingCart($dale, $product_id){
+	function getSpecificProductFromShoppingCart($dale, $product_id, $id_user){
 
 		// mengambil data jika tersedia di shopping cart
 		$shopCart = $dale->kueri("SELECT *
 								  FROM   `shopping_cart` 
-								  WHERE  id_service_product = '".$product_id."'");
+								  WHERE  id_service_product = '".$product_id."' AND
+								  		 id_user            = '".$id_user."'");
 
 		return json_decode($shopCart);
 
 	}
 
-	function getSpecificProduct($dale, $product_id){
-		$cart = getSpecificProductFromShoppingCart($dale, $product_id);
+	function productExistInShoppingCart($dale, $product_id, $id_user){
+
+		// mengambil data jika tersedia di shopping cart
+		$shopCart = $dale->kueri("SELECT *
+								  FROM   `shopping_cart` 
+								  WHERE  id_service_product = '".$product_id."' AND
+								  		 id_user            = '".$id_user."'");
+
+		$shopCart = json_decode($shopCart);
+
+		if(sizeof($shopCart) == 0){
+			return null;
+		}
+		return $shopCart[0] -> id_shopcart;
+	}
+
+	// menambil produk tertentu
+	function getSpecificProduct($dale, $product_id, $id_user){
+		$cart = getSpecificProductFromShoppingCart($dale, $product_id, $id_user);
 		$data = $dale->kueri("SELECT a.`id_service` as product_id,
 									 a.`name_service` as product_name,
 									 a.`price_service` as product_price,
@@ -50,11 +68,13 @@
 		$product['product_name']  = $data[0] -> product_name;
 		$product['product_price'] = $data[0] -> product_price;
 		$product['product_desc']  = $data[0] -> product_desc;
+		$product['product_note']  = "";
 		$product['product_qty']   = 1;
 
 		// jika data tersedia di shopping cart, maka gunakan jumlah yang ada di shopping cart
 		if(sizeof($cart) > 0){
 			$product['product_qty'] = $cart[0] -> shopcart_qty;
+			$product['product_note']  = $cart[0] -> shopcart_note;
 		}	
 
 		return $product;
