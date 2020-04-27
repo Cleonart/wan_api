@@ -6,7 +6,7 @@
 	$DATABASE = "database";
 	$USERNAME = "root";
 	$PASSWORD = "";
-	
-  $conn = mysqli_connect($HOST, $DATABASE,$USERNAME,$PASSWORD);
-	//Test commit
+	$dale->konek_ke_database($HOST, $DATABASE,$USERNAME,$PASSWORD);
+  	$conn = mysqli_connect($HOST, $DATABASE,$USERNAME,$PASSWORD);
+
 ?>
