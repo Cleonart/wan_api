@@ -6,6 +6,7 @@
 	$DATABASE = "database";
 	$USERNAME = "root";
 	$PASSWORD = "";
+	$dale = new dale();
 	$dale->konek_ke_database($HOST, $DATABASE,$USERNAME,$PASSWORD);
 
 ?>
