@@ -1,13 +1,10 @@
 <?php
 	
-	require '../../configuration.php';
+	require '../shoppingCart/getAllShoppingCart.php';
 
-	if(isset($_GET['payid'])){
-		$pembayaran = $_GET['payid'];
-		$data = $dale->kueri("SELECT * FROM payment 
-							  WHERE `id_payment` = '".$pembayaran."' AND
-							  `shopping_cart_status` = 1 ");
-		echo $data;
+	if(isset($_GET['user'])){
+		$id_user = $_GET['user'];
+		getAllItemShoppingCart($dale, $id_user);
 	}
 	
 ?>

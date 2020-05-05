@@ -54,7 +54,7 @@
 												INNER JOIN `user` as c
 													ON b.`provider_$type` = c.`id_user` 
 												WHERE c.`id_user` = '".$dataVendor[$i] -> vendor_id."'");
-				$item       = json_decode($mengambilItemKeranjang);
+				$item = json_decode($mengambilItemKeranjang);
 				for($j; $j < sizeof($item); $j++){
 					$cart[$i]['vendor_products'][$j]['product_id']   = $item[$j] -> product_id;
 					$cart[$i]['vendor_products'][$j]['product_name'] = $item[$j] -> product_name;
@@ -65,6 +65,39 @@
 		}
 
 		return $cart;
+	}
+
+	function getItemShoppingCart($dale, $id_user, $type){
+
+		$mengambilItemKeranjang = $dale->kueri("SELECT a.`id_service_product` as product_id, 
+													   b.`name_$type` as product_name,
+													   a.`shopcart_qty` as product_qty,
+													   a.`shopcart_price` as product_price
+												FROM `shopping_cart` as a
+												INNER JOIN $type as b 
+													ON a.`id_service_product` = b.`id_$type`
+												WHERE a.`id_user` = '".$id_user."'");
+
+		return json_decode($mengambilItemKeranjang);
+	}
+
+	function getAllItemShoppingCart($dale, $id){
+
+		$final_cart = [];
+
+		$cartForProduct = getItemShoppingCart($dale, $id, "product");
+		$cartForService = getItemShoppingCart($dale, $id, "service");
+
+		if($cartForService != []){
+			$final_cart = array_merge($final_cart, $cartForService);
+		}
+
+		
+		if($cartForProduct != false){
+			$final_cart = array_merge($final_cart, $cartForProduct);
+		}
+
+		echo json_encode($final_cart);
 	}
 	
 ?>
